@@ -15,28 +15,29 @@ include_once '../objects/product.php';
 $database = new Database();
 $db = $database->getConnection();
   
-$product = new Product($db);
+$voiture = new Voiture($db);
   
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
   
 // make sure data is not empty
 if(
-    !empty($data->name) &&
-    !empty($data->price) &&
-    !empty($data->description) &&
-    !empty($data->category_id)
+    !empty($data->nom) &&
+    !empty($data->id_marque) &&
+    !empty($data->id_model) &&
+    !empty($data->matricule) 
+
 ){
   
     // set product property values
-    $product->name = $data->name;
-    $product->price = $data->price;
-    $product->description = $data->description;
-    $product->category_id = $data->category_id;
-    $product->created = date('Y-m-d H:i:s');
+    $voiture->nom = $data->nom;
+    $voiture->id_marque = $data->id_marque;
+    $voiture->id_model = $data->id_model;
+    $voiture->matricule = $data->matricule;
+    $voiture->created_at = date('Y-m-d H:i:s');
   
     // create the product
-    if($product->create()){
+    if($voiture->save()){
   
         // set response code - 201 created
         http_response_code(201);

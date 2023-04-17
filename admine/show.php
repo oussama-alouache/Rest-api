@@ -4,24 +4,24 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 // include database and object files
 include_once '../config/database.php';
-include_once '../objects/product.php';
+include_once '../objects/voiture.php';
   
 // instantiate database and product object
 $database = new Database();
 $db = $database->getConnection();
   
 // initialize object
-$product = new Product($db);
+$voiture = new Voiture($db);
   
 // read products will be here
-$stmt = $product->read();
+$stmt = $voiture->show();
 $num = $stmt->rowCount();
   
 // check if more than 0 record found
 if($num>0){
   
     // products array
-    $products_arr=array();
+    $voiture_arr=array();
     // $products_arr[]=array();
   
     // retrieve our table contents
@@ -32,23 +32,24 @@ if($num>0){
         // just $name only
         extract($row);
   
-        $product_item=array(
+        $voiture_item=array(
             "id" => $id,
-            "name" => $name,
-            "description" => html_entity_decode($description),
-            "price" => $price,
+            "nom" => $nom,
+            "id_marque" => html_entity_decode($id_marque),
+            "id_model" => $price,
+            "matricule" => html_entity_decode($matricule),
             "category_id" => $category_id,
             "category_name" => $category_name
         );
   
-        array_push($products_arr, $product_item);
+        array_push($voiture_arr, $voiture_item);
     }
   
     // set response code - 200 OK
     http_response_code(200);
   
     // show products data in json format
-    echo json_encode($products_arr);
+    echo json_encode($voiture_arr);
 }
 else{
   

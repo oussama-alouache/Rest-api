@@ -8,30 +8,29 @@ header('Content-Type: application/json');
   
 // include database and object files
 include_once '../config/database.php';
-include_once '../objects/product.php';
+include_once '../objects/reservation.php';
   
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
   
 // prepare product object
-$product = new Product($db);
-  
+$reservation = new Reservation($db);  
 // set ID property of record to read
-$product->id = isset($_GET['id']) ? $_GET['id'] : die();
+$reservation->id = isset($_GET['id']) ? $_GET['id'] : die();
   
 // read the details of product to be edited
-$product->readOne();
+$reservation->edit();
   
-if($product->name!=null){
+if($reservation->id_user!=null){
     // create array
-    $product_arr = array(
-        "id" =>  $product->id,
-        "name" => $product->name,
-        "description" => $product->description,
-        "price" => $product->price,
-        "category_id" => $product->category_id,
-        "category_name" => $product->category_name
+    $reservatione_arr = array(
+        "id_user" => $reservation->id_user,
+        "id_voiture" => $reservation->id_voiture,
+        "nom" => $reservation->nom,
+        "matricule" => $reservation->matricule,
+        "created_at" => $reservation->created_at,
+        "updatted_at" => $reservation->updatted_at
   
     );
   
@@ -39,7 +38,7 @@ if($product->name!=null){
     http_response_code(200);
   
     // make it json format
-    echo json_encode($product_arr);
+    echo json_encode($reservatione_arr);
 }
   
 else{
